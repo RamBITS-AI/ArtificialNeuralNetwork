@@ -13,9 +13,7 @@ Weights are initialized randomly.
 
 The Activation function is a sigmoid.
 
-$$ h_ {\theta \hspace{0.5 mm} out} =  \frac{\mathrm{1} }{\mathrm{1} + e^{-h_ {{\theta} \hspace{0.5 mm} {net}}}}  $$
-
-$$ where, for \hspace{2 mm} e.g., \hspace{2 mm} h_ {1 \hspace{0.85 mm} {net}} = \omega_1 . i_1 + \omega_2 . i_2 + b_1 $$
+![](sigmoid.png)
 
 The Dataset has samples with 2 features each.
 
