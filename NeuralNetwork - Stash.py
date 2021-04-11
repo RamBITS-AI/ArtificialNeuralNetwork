@@ -104,7 +104,7 @@ def print_network(network, padding = 4):
 # Initialize a network
 def initialize_network(n_input_columns, n_hidden, n_distinct_possible_outputs):
     network = list()
-    input_layer = [{'weights':[random() for i in range(n_input_columns + 1)], 'prev':[0 for i in range(n_input_columns + 1)]} for i in range(n_input_columns)]
+    input_layer = [{'weights':[random() for i in range(n_input_columns + 1)], 'prev':[0 for i in range(n_input_columns + 1)]} for i in range(n_hidden)]
     network.append(input_layer)
     print("Single Layer:")
     print_network(network)
@@ -211,7 +211,7 @@ def backward_propagate_error(network, expected):
 def update_weights(network, row, l_rate, mu):
     for i in range(len(network)):
         inputs = row[:-1]        
-        if i != 0: # If not Input Layer
+        if i != 0:
             inputs = [neuron['output'] for neuron in network[i - 1]]
         for neuron in network[i]:
             for j in range(len(inputs)):
@@ -324,7 +324,7 @@ def test():
     n_folds = 5
     l_rate = 0.1
     mu=0.001
-    n_epoch = 1500 # 1500
+    n_epoch = 3 # 1500
     n_hidden = 4
     scores = run_algorithm(dataset, back_propagation, n_folds, l_rate, n_epoch, n_hidden, mu)
 
