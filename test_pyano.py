@@ -1,4 +1,4 @@
-import OODNN as dnn
+import pyano as dnn
 import numpy as np
 
 import utils
@@ -6,7 +6,7 @@ import utils
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import cohen_kappa_score
 
-def test_OODNN():
+def test_pyano():
 	n_folds = 5
 	learning_rate = 0.1 #1e-05
 	n_epoch = 1500
@@ -82,6 +82,13 @@ def test_OODNN():
 
 def initialize_network(n_inputs, n_targets):
 	n_hidden = 4
+	
+	input_layer = None
+	output_layer = None
+	hidden_layer_1 = None
+	hidden_layer_2 = None
+	hidden_layer_3 = None
+
 	input_layer = dnn.InputLayer(n_inputs, dnn.SigmoidActivation())
 
 	hidden_layer_1 = input_layer.attachToNextLayer(n_inputs, dnn.HiddenLayer(n_hidden, dnn.SigmoidActivation()))
@@ -121,6 +128,8 @@ def train_and_predict(dataset, train, test, row, learning_rate, n_epoch, mu):
 	n_input_columns = len(train[0]) - 1 # Number of columns in the training dataset minus the one column which contains the output
 	distinct_outputs = set([row[-1] for row in train])
 	n_distinct_outputs = len(distinct_outputs)
+	input_Layer = None
+	output_layer = None
 	input_layer, output_layer = initialize_network(n_input_columns, n_distinct_outputs)
 
 	for epoch in range(n_epoch):
@@ -163,4 +172,4 @@ def train_and_predict(dataset, train, test, row, learning_rate, n_epoch, mu):
 	print('end')
 	return predictions
 
-test_OODNN()
+test_pyano()

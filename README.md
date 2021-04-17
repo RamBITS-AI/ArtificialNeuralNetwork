@@ -1,13 +1,19 @@
-# Artificial Neural Network
-An artificial neural network that utilizes back propagation for training. It has 3 layers of neurons. The hidden layer has 4, the input layer has 3 and the output layer has 6 neurons.
+# Contributions
+    Snehanshu Saha Sir from BITS Pilani
+        For Teaching the mathematical concepts and also showing with examples on how to develop a Neural Network.
+        And for sharing a working Artificial MultiLayerPerceptron implementation in Python
+    Ramachandran C - M.Tech Student of Snehanshu Saha Sir in BITS Pilani
 
-# Neural Network
-Three Layers in the Neural Network consist of:  
+# Pyano - A Deep Neural Network Framework
+An artificial neural network that utilizes back propagation for training. It has a total of 5  layers of neurons. The hidden layers have 4 each, the input layer has 3 and the output layer has 6 neurons.
+
+# Deep Neural Network
+The Layers in the Neural Network consist of:  
     1. Single Input Layer with 3 neurons.  
-    2. Single Hidden Layer with 4 neurons.  
+    2. Three Hidden Layers with 4 neurons each.  
     3. Single Output Layer with 6 neurons.
 
-It represents a 2 class classification problem.
+It represents a 6 class classification problem.
 
 Weights are initialized randomly.
 
@@ -15,12 +21,12 @@ The Activation function is a sigmoid.
 
 ![](sigmoid.png)
 
-The Dataset has samples with 2 features each.
+The Dataset has samples with 3 features each.
 
 ![](NeuralNetwork.png)
 
 # Objective
-Define and implement a NN that predicts classes for a test set with decently accurate results.
+Define and implement an Object-Oriented Deep Neural Network Framework (capable of implementing DNNs with multiple hidden layers) that predicts classes for a test set with decently accurate results.
 
 Implement Back propagation algorithm to update weights.
 
