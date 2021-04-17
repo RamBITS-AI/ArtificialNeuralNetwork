@@ -32,10 +32,10 @@ class ActivationNeuron(Neuron):
 		super().__init__()
 
 	def get_activation(self):
-		return self.layer.activation.activation(self.input)
+		return self.layer.activation.activation(self.input, [neuron.weights for neuron in self.layer.prev_layer.neurons])
 
 	def get_derivative(self):
-		return self.layer.activation.derivative(self.input, self.output)
+		return self.layer.activation.derivative(self.input, self.output, [neuron.output for neuron in self.layer.neurons])
 
     # # Determine how much the neuron's total input has to change to move closer to the expected output
     # #
@@ -121,6 +121,15 @@ class SBAFActivation():
 		self.derivative = utils.sbaf_derivative
 
 
+@Activation.register
+class SoftMaxActivation():
+	def __init__(
+		self) -> None:
+		super().__init__()
+		self.activation = utils.softmax
+		self.derivative = utils.softmax_derivative
+
+
 class NeuralLayer(abc.ABC):
 	def __init__(
 		self) -> None:
@@ -184,17 +193,14 @@ class InputLayer(WeightedLayer):
 			neuron.output = inputs[n]
 
 		current_layer = self
+		output_layer = None
 		
-		while current_layer.next_layer != None:
+		while current_layer != None:
 			current_layer.forward_propagate()
+			output_layer = current_layer
 			current_layer = current_layer.next_layer
 
-		current_layer.forward_propagate()
-
-		outputs = []
-		for output_neuron in current_layer.neurons:
-			outputs.append(output_neuron.output)
-		return outputs
+		return [output_neuron.output for output_neuron in output_layer.neurons]
 
 		# Update network weights with error
 	def update_weights(self, inputs, learning_rate, mu):
@@ -333,11 +339,30 @@ class HiddenLayer(WeightedLayer, ActivationLayer):
 	def backward_propagate(self, output_layer, targets, learning_rate):
 		for n_prev, neuron_prev in enumerate(self.prev_layer.neurons):
 			neuron_prev.partial_error_derivatives = utils.generate_zeros(len(self.neurons))
-		for on, output_neuron in enumerate(output_layer.neurons):
+
+		for n_prev, neuron_prev in enumerate(self.prev_layer.neurons):
 			for n, neuron in enumerate(self.neurons):
-				for n_prev, neuron_prev in enumerate(self.prev_layer.neurons):
-					neuron_prev.partial_error_derivatives[n] += -1 * (targets[on] - output_neuron.output) * \
-						output_neuron.get_derivative() * neuron.weights[on] * \
-						neuron.get_derivative() * neuron_prev.output
-				for n_prev, neuron_prev in enumerate(self.prev_layer.neurons):
-					neuron_prev.next_weights[n] -= (learning_rate * neuron_prev.partial_error_derivatives[n])
+				for n_next, neuron_next in enumerate(self.next_layer.neurons):
+					derivative = neuron_next.get_derivative()
+					if type(self.next_layer.activation) == SoftMaxActivation:
+						derivative = derivative[n_next]
+					neuron_prev.partial_error_derivatives[n] += \
+						-1 * (targets[n_next] - neuron_next.output) * \
+						derivative * \
+						neuron.weights[n_next] * \
+						neuron.get_derivative() * \
+						neuron_prev.output
+
+				neuron_prev.next_weights[n] = neuron_prev.weights[n] - (learning_rate * neuron_prev.partial_error_derivatives[n])
+
+	# def backward_propagate(self, output_layer, targets, learning_rate):
+	# 	for n_prev, neuron_prev in enumerate(self.prev_layer.neurons):
+	# 		neuron_prev.partial_error_derivatives = utils.generate_zeros(len(self.neurons))
+	# 	for on, output_neuron in enumerate(output_layer.neurons):
+	# 		for n, neuron in enumerate(self.neurons):
+	# 			for n_prev, neuron_prev in enumerate(self.prev_layer.neurons):
+	# 				neuron_prev.partial_error_derivatives[n] += -1 * (targets[on] - output_neuron.output) * \
+	# 					output_neuron.get_derivative() * neuron.weights[on] * \
+	# 					neuron.get_derivative() * neuron_prev.output
+	# 			for n_prev, neuron_prev in enumerate(self.prev_layer.neurons):
+	# 				neuron_prev.next_weights[n] -= (learning_rate * neuron_prev.partial_error_derivatives[n])

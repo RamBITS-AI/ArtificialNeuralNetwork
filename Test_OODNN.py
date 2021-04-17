@@ -8,10 +8,10 @@ from sklearn.metrics import cohen_kappa_score
 
 def test_OODNN():
 	n_folds = 5
-	learning_rate = 1e-05
-	n_epoch = 3
+	learning_rate = 0.1 #1e-05
+	n_epoch = 1500
 	mu = 0.001
-	filename = 'data-copy.csv' # 'data.csv'
+	filename = 'data.csv' # 'data.csv'
 
 	dataset = utils.load_csv(filename)
 
@@ -84,11 +84,11 @@ def initialize_network(n_inputs, n_targets):
 	n_hidden = 4
 	input_layer = dnn.InputLayer(n_inputs, n_hidden, dnn.SigmoidActivation())
 
-	hidden_layer_1 = input_layer.attachToNextLayer(dnn.HiddenLayer(n_hidden, dnn.SigmoidActivation()))
+	hidden_layer_1 = input_layer.attachToNextLayer(n_inputs, dnn.HiddenLayer(n_hidden, dnn.SigmoidActivation()))
 	# hidden_layer_2 = hidden_layer_1.attachToNextLayer(dnn.HiddenLayer(4, dnn.SigmoidActivation()))
 	# hidden_layer_3 = hidden_layer_2.attachToNextLayer(dnn.HiddenLayer(4, dnn.SigmoidActivation()))
 
-	output_layer = hidden_layer_1.attachToNextLayer(dnn.OutputLayer(n_targets, dnn.SigmoidActivation()))
+	output_layer = hidden_layer_1.attachToNextLayer(n_inputs, dnn.OutputLayer(n_targets, dnn.SigmoidActivation()))
 
 	return input_layer, output_layer
 
