@@ -178,7 +178,6 @@ class InputLayer(WeightedLayer, ActivationLayer):
 	def __init__(
 		self,
 		n_inputs,
-		n_hidden,
 		activation) -> None:
 		super().__init__()
 		self.neurons = [HiddenNeuron() for i in range(n_inputs)]
@@ -286,63 +285,61 @@ class OutputLayer(WeightedLayer, ActivationLayer):
 
 	def backward_propagate(self, targets, learning_rate):
 		hidden_layer = self.prev_layer
+
 		for hn, hidden_neuron in enumerate(hidden_layer.neurons):
 			hidden_neuron.partial_error_derivatives = utils.generate_zeros(len(self.neurons))
 
-		hidden_neuron = hidden_layer.neurons[0]
-
-		for on, output_neuron in enumerate(self.neurons):
-			if type(self.activation) is SoftMaxActivation:
-				derivatives = output_neuron.get_derivative()
-				if derivatives.shape != (6,):
-					raise ValueError("Derivative is Multidimensional!")
-				derivative = derivatives[on]
-			hidden_neuron.partial_error_derivatives[on] += -1 * \
-				(targets[on] - output_neuron.output) * \
-				derivative * hidden_neuron.output
-			hidden_neuron.next_weights[on] = hidden_neuron.weights[on] - (learning_rate * hidden_neuron.partial_error_derivatives[on])
+		for hn, hidden_neuron in enumerate(hidden_layer.neurons):
+			for on, output_neuron in enumerate(self.neurons):
+				if type(self.activation) is SoftMaxActivation:
+					derivatives = output_neuron.get_derivative()
+					if derivatives.shape != (6,):
+						raise ValueError("Derivative is Multidimensional!")
+					derivative = derivatives[on]
+				hidden_neuron.partial_error_derivatives[on] += -1 * \
+					(targets[on] - output_neuron.output) * \
+					derivative * hidden_neuron.output
+				hidden_neuron.next_weights[on] = hidden_neuron.weights[on] - (learning_rate * hidden_neuron.partial_error_derivatives[on])
 		
-		hidden_neuron = hidden_layer.neurons[1]
+		# hidden_neuron = hidden_layer.neurons[1]
 
-		for on, output_neuron in enumerate(self.neurons):
-			if type(self.activation) is SoftMaxActivation:
-				derivatives = output_neuron.get_derivative()
-				if derivatives.shape != (6,):
-					raise ValueError("Derivative is Multidimensional!")
-				derivative = derivatives[on]
-			hidden_neuron.partial_error_derivatives[on] += -1 * \
-				(targets[on] - output_neuron.output) * \
-				derivative * hidden_neuron.output
-			hidden_neuron.next_weights[on] = hidden_neuron.weights[on] - (learning_rate * hidden_neuron.partial_error_derivatives[on])
+		# for on, output_neuron in enumerate(self.neurons):
+		# 	if type(self.activation) is SoftMaxActivation:
+		# 		derivatives = output_neuron.get_derivative()
+		# 		if derivatives.shape != (6,):
+		# 			raise ValueError("Derivative is Multidimensional!")
+		# 		derivative = derivatives[on]
+		# 	hidden_neuron.partial_error_derivatives[on] += -1 * \
+		# 		(targets[on] - output_neuron.output) * \
+		# 		derivative * hidden_neuron.output
+		# 	hidden_neuron.next_weights[on] = hidden_neuron.weights[on] - (learning_rate * hidden_neuron.partial_error_derivatives[on])
 		
-		hidden_neuron = hidden_layer.neurons[2]
+		# hidden_neuron = hidden_layer.neurons[2]
 
-		for on, output_neuron in enumerate(self.neurons):
-			if type(self.activation) is SoftMaxActivation:
-				derivatives = output_neuron.get_derivative()
-				if derivatives.shape != (6,):
-					raise ValueError("Derivative is Multidimensional!")
-				derivative = derivatives[on]
-			hidden_neuron.partial_error_derivatives[on] += -1 * \
-				(targets[on] - output_neuron.output) * \
-				derivative * hidden_neuron.output
-			hidden_neuron.next_weights[on] = hidden_neuron.weights[on] - (learning_rate * hidden_neuron.partial_error_derivatives[on])
+		# for on, output_neuron in enumerate(self.neurons):
+		# 	if type(self.activation) is SoftMaxActivation:
+		# 		derivatives = output_neuron.get_derivative()
+		# 		if derivatives.shape != (6,):
+		# 			raise ValueError("Derivative is Multidimensional!")
+		# 		derivative = derivatives[on]
+		# 	hidden_neuron.partial_error_derivatives[on] += -1 * \
+		# 		(targets[on] - output_neuron.output) * \
+		# 		derivative * hidden_neuron.output
+		# 	hidden_neuron.next_weights[on] = hidden_neuron.weights[on] - (learning_rate * hidden_neuron.partial_error_derivatives[on])
 		
-		hidden_neuron = hidden_layer.neurons[3]
+		# hidden_neuron = hidden_layer.neurons[3]
 
-		for on, output_neuron in enumerate(self.neurons):
-			if type(self.activation) is SoftMaxActivation:
-				derivatives = output_neuron.get_derivative()
-				if derivatives.shape != (6,):
-					raise ValueError("Derivative is Multidimensional!")
-				derivative = derivatives[on]
-			hidden_neuron.partial_error_derivatives[on] += -1 * \
-				(targets[on] - output_neuron.output) * \
-				derivative * hidden_neuron.output
-			hidden_neuron.next_weights[on] = hidden_neuron.weights[on] - (learning_rate * hidden_neuron.partial_error_derivatives[on])
+		# for on, output_neuron in enumerate(self.neurons):
+		# 	if type(self.activation) is SoftMaxActivation:
+		# 		derivatives = output_neuron.get_derivative()
+		# 		if derivatives.shape != (6,):
+		# 			raise ValueError("Derivative is Multidimensional!")
+		# 		derivative = derivatives[on]
+		# 	hidden_neuron.partial_error_derivatives[on] += -1 * \
+		# 		(targets[on] - output_neuron.output) * \
+		# 		derivative * hidden_neuron.output
+		# 	hidden_neuron.next_weights[on] = hidden_neuron.weights[on] - (learning_rate * hidden_neuron.partial_error_derivatives[on])
 		
-
-
 
 		# for on, output_neuron in enumerate(self.neurons):
 		# 	for hn, hidden_neuron in enumerate(hidden_layer.neurons):
