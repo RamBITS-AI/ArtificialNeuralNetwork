@@ -139,25 +139,6 @@ class NeuralLayer(abc.ABC):
 			neuron.output = neuron.get_activation()
 			new_inputs.append(neuron.output)
 		return new_inputs
-		
-
-		# if self.prev_layer != None and (type(self) != OutputLayer or type(self.activation) != SoftMaxActivation):
-		# 	for n, neuron in enumerate(self.neurons):
-		# 		neuron.output = neuron.get_activation()
-		# if self.next_layer != None:
-		# 	for nn, next_layer_neuron in enumerate(self.next_layer.neurons):
-		# 		next_layer_neuron.input = 0
-		# 	for nn, next_layer_neuron in enumerate(self.next_layer.neurons):
-		# 		for n, neuron in enumerate(self.neurons):
-		# 			next_layer_neuron.input += neuron.output * neuron.weights[nn]
-		# 	for nn, next_layer_neuron in enumerate(self.next_layer.neurons):
-		# 		next_layer_neuron.input += self.bias
-		# 		if (next_layer_neuron.input > 100 or next_layer_neuron.input < -100):
-		# 			print("====ERROR====>", next_layer_neuron.input)
-		# elif self.prev_layer != None and type(self.activation) == SoftMaxActivation:
-		# 	smax = self.get_activation()
-		# 	for i_max, smax_value in enumerate(smax):
-		# 		self.neurons[i_max].output = smax_value
 
 
 class ActivationLayer(NeuralLayer):
@@ -207,6 +188,7 @@ class InputLayer(WeightedLayer, ActivationLayer):
 		for input_neuron in self.neurons:
 			input_neuron.layer = self
 
+
 	def backward_propagate_error(self, targets):
 		hidden_layer = self.next_layer
 		input_layer = self
@@ -239,6 +221,7 @@ class InputLayer(WeightedLayer, ActivationLayer):
 			temp = learning_rate * input_neuron.delta + mu * input_layer.prev_bias
 			input_layer.bias += temp
 			input_layer.prev_bias = temp
+
 
 	def full_forward_propagate(self, inputs):
 		for n, neuron in enumerate(self.neurons):
@@ -305,99 +288,6 @@ class OutputLayer(WeightedLayer, ActivationLayer):
 			output_layer.prev_bias = temp
 
 
-	def backward_propagate(self, targets, learning_rate):
-		hidden_layer = self.prev_layer
-
-		for hn, hidden_neuron in enumerate(hidden_layer.neurons):
-			hidden_neuron.partial_error_derivatives = utils.generate_zeros(len(self.neurons))
-
-		for hn, hidden_neuron in enumerate(hidden_layer.neurons):
-			for on, output_neuron in enumerate(self.neurons):
-				if type(self.activation) is SoftMaxActivation:
-					derivatives = output_neuron.get_derivative()
-					if derivatives.shape != (6,):
-						raise ValueError("Derivative is Multidimensional!")
-					derivative = derivatives[on]
-				hidden_neuron.partial_error_derivatives[on] += -1 * \
-					(targets[on] - output_neuron.output) * \
-					derivative * hidden_neuron.output
-				hidden_neuron.next_weights[on] = hidden_neuron.weights[on] - (learning_rate * hidden_neuron.partial_error_derivatives[on])
-		
-		# hidden_neuron = hidden_layer.neurons[1]
-
-		# for on, output_neuron in enumerate(self.neurons):
-		# 	if type(self.activation) is SoftMaxActivation:
-		# 		derivatives = output_neuron.get_derivative()
-		# 		if derivatives.shape != (6,):
-		# 			raise ValueError("Derivative is Multidimensional!")
-		# 		derivative = derivatives[on]
-		# 	hidden_neuron.partial_error_derivatives[on] += -1 * \
-		# 		(targets[on] - output_neuron.output) * \
-		# 		derivative * hidden_neuron.output
-		# 	hidden_neuron.next_weights[on] = hidden_neuron.weights[on] - (learning_rate * hidden_neuron.partial_error_derivatives[on])
-		
-		# hidden_neuron = hidden_layer.neurons[2]
-
-		# for on, output_neuron in enumerate(self.neurons):
-		# 	if type(self.activation) is SoftMaxActivation:
-		# 		derivatives = output_neuron.get_derivative()
-		# 		if derivatives.shape != (6,):
-		# 			raise ValueError("Derivative is Multidimensional!")
-		# 		derivative = derivatives[on]
-		# 	hidden_neuron.partial_error_derivatives[on] += -1 * \
-		# 		(targets[on] - output_neuron.output) * \
-		# 		derivative * hidden_neuron.output
-		# 	hidden_neuron.next_weights[on] = hidden_neuron.weights[on] - (learning_rate * hidden_neuron.partial_error_derivatives[on])
-		
-		# hidden_neuron = hidden_layer.neurons[3]
-
-		# for on, output_neuron in enumerate(self.neurons):
-		# 	if type(self.activation) is SoftMaxActivation:
-		# 		derivatives = output_neuron.get_derivative()
-		# 		if derivatives.shape != (6,):
-		# 			raise ValueError("Derivative is Multidimensional!")
-		# 		derivative = derivatives[on]
-		# 	hidden_neuron.partial_error_derivatives[on] += -1 * \
-		# 		(targets[on] - output_neuron.output) * \
-		# 		derivative * hidden_neuron.output
-		# 	hidden_neuron.next_weights[on] = hidden_neuron.weights[on] - (learning_rate * hidden_neuron.partial_error_derivatives[on])
-		
-
-		# for on, output_neuron in enumerate(self.neurons):
-		# 	for hn, hidden_neuron in enumerate(hidden_layer.neurons):
-		# 		hidden_neuron.partial_error_derivatives[on] += -1 * \
-		# 			(targets[on] - output_neuron.output) * \
-		# 			output_neuron.get_derivative() * hidden_neuron.output
-		# 	for hn, hidden_neuron in enumerate(hidden_layer.neurons):
-		# 		hidden_neuron.next_weights[on] -= (learning_rate * hidden_neuron.partial_error_derivatives[on])
-
-		# for on, output_neuron in enumerate(self.neurons):
-		# hidden_layer.partial_error_derivative_of_bias -= (targets[on] - output_neuron.output)
-		
-		# hidden_layer.partial_error_derivative_of_bias /= len(self.neurons)
-		# hidden_layer.partial_error_derivative_of_bias *= -1
-		# hidden_layer.bias -= (learning_rate * hidden_layer.partial_error_derivative_of_bias)
-
-
-	def full_backward_propagate(self, targets, learning_rate):
-		self.backward_propagate(targets, learning_rate)
-
-		prev_layer = self.prev_layer
-		while (prev_layer.prev_layer != None):
-			prev_layer.backward_propagate(self, targets, learning_rate)
-			prev_layer = prev_layer.prev_layer
-
-		l = 1
-		prev_layer = self.prev_layer
-		while (prev_layer != None):
-			for pn, prev_neuron in enumerate(prev_layer.neurons):
-				for w, weight in enumerate(prev_neuron.weights):
-					prev_neuron.weights[w] = prev_neuron.next_weights[w]
-					prev_neuron.next_weights[w] = 0
-					# print(f"Weight @ Network[{l}][{pn}][{w}] = {prev_neuron.weights[w]}")
-			prev_layer = prev_layer.prev_layer
-			l -= 1
-
 	def get_activation(self):
 		W = [neuron.weights for neuron in self.prev_layer.neurons]
 		x = [neuron.output for neuron in self.prev_layer.neurons]
@@ -456,45 +346,3 @@ class HiddenLayer(WeightedLayer, ActivationLayer):
 			temp = learning_rate * hidden_neuron.delta + mu * hidden_layer.prev_bias
 			hidden_layer.bias += temp
 			hidden_layer.prev_bias = temp
-
-
-	def backward_propagate(self, output_layer, targets, learning_rate):
-		for n_prev, neuron_prev in enumerate(self.prev_layer.neurons):
-			neuron_prev.partial_error_derivatives = utils.generate_zeros(len(self.neurons))
-
-		for n_prev, neuron_prev in enumerate(self.prev_layer.neurons):
-			for n, neuron in enumerate(self.neurons):
-				for n_next, neuron_next in enumerate(self.next_layer.neurons):
-					derivative = neuron_next.get_derivative()
-					if type(self.next_layer.activation) == SoftMaxActivation:
-						derivative = derivative[n_next]
-					neuron_prev.partial_error_derivatives[n] += \
-						-1 * (targets[n_next] - neuron_next.output) * \
-						derivative * \
-						neuron.weights[n_next] * \
-						neuron.get_derivative() * \
-						neuron_prev.output
-
-				neuron_prev.next_weights[n] = neuron_prev.weights[n] - (learning_rate * neuron_prev.partial_error_derivatives[n])
-
-		# for on, output_neuron in enumerate(output_layer.neurons):
-		# 	for n, neuron in enumerate(self.neurons):
-		# 		for n_prev, neuron_prev in enumerate(self.prev_layer.neurons):
-		# 			neuron_prev.partial_error_derivatives[n] += -1 * \
-		# 				(targets[on] - output_neuron.output) * \
-		# 				output_neuron.get_derivative() * neuron.weights[on] * \
-		# 				neuron.get_derivative() * neuron_prev.output
-		# 		for n_prev, neuron_prev in enumerate(self.prev_layer.neurons):
-		# 			neuron_prev.next_weights[n] -= (learning_rate * neuron_prev.partial_error_derivatives[n])
-
-
-		# input_layer.partial_error_derivative_of_bias += (targets[on] - output_neuron.output)
-		# input_layer.bias -= (learning_rate * input_layer.bias * input_layer.partial_error_derivative_of_bias)
-		# input_layer.partial_error_derivative_of_bias += -1 * (targets[on] - output_neuron.output)
-		# input_layer.bias -= (learning_rate * input_layer.bias * input_layer.partial_error_derivative_of_bias)
-
-		# self.prev_layer.partial_error_derivative_of_bias += self.partial_error_derivative_of_bias
-		
-		# hidden_layer.partial_error_derivative_of_bias /= len(self.neurons)
-		# hidden_layer.partial_error_derivative_of_bias *= -1
-		# self.prev_layer.bias -= (learning_rate * self.prev_layer.partial_error_derivative_of_bias)
