@@ -147,6 +147,15 @@ class ActivationLayer(NeuralLayer):
 		super().__init__()
 		self.activation = None
 	
+
+	def get_activation(self):
+		W = [neuron.weights for neuron in self.prev_layer.neurons]
+		x = [neuron.output for neuron in self.prev_layer.neurons]
+		Z = np.dot(np.transpose(W), x)
+		h = self.activation.activation(None, Z)
+		return h
+
+
 class WeightedLayer(NeuralLayer):
 	def __init__(
 		self) -> None:
@@ -286,14 +295,6 @@ class OutputLayer(WeightedLayer, ActivationLayer):
 			temp = learning_rate * output_neuron.delta + mu * output_layer.prev_bias
 			output_layer.bias += temp
 			output_layer.prev_bias = temp
-
-
-	def get_activation(self):
-		W = [neuron.weights for neuron in self.prev_layer.neurons]
-		x = [neuron.output for neuron in self.prev_layer.neurons]
-		Z = np.dot(np.transpose(W), x)
-		h = self.activation.activation(None, Z)
-		return h
 		
 
 
