@@ -85,10 +85,10 @@ def initialize_network(n_inputs, n_targets):
 	input_layer = dnn.InputLayer(n_inputs, n_hidden, dnn.SigmoidActivation())
 
 	hidden_layer_1 = input_layer.attachToNextLayer(n_inputs, dnn.HiddenLayer(n_hidden, dnn.SigmoidActivation()))
-	# hidden_layer_2 = hidden_layer_1.attachToNextLayer(dnn.HiddenLayer(4, dnn.SigmoidActivation()))
-	# hidden_layer_3 = hidden_layer_2.attachToNextLayer(dnn.HiddenLayer(4, dnn.SigmoidActivation()))
+	hidden_layer_2 = hidden_layer_1.attachToNextLayer(n_inputs, dnn.HiddenLayer(n_hidden, dnn.SigmoidActivation()))
+	hidden_layer_3 = hidden_layer_2.attachToNextLayer(n_inputs, dnn.HiddenLayer(n_hidden, dnn.SigmoidActivation()))
 
-	output_layer = hidden_layer_1.attachToNextLayer(n_inputs, dnn.OutputLayer(n_targets, dnn.SigmoidActivation()))
+	output_layer = hidden_layer_3.attachToNextLayer(n_inputs, dnn.OutputLayer(n_targets, dnn.SigmoidActivation()))
 
 	return input_layer, output_layer
 
