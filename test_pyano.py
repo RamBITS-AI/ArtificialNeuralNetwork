@@ -8,10 +8,10 @@ from sklearn.metrics import cohen_kappa_score
 
 def test_pyano():
 	n_folds = 5
-	learning_rate = 0.1 #1e-05
+	learning_rate = 0.1  # 1e-05
 	n_epoch = 1500
 	mu = 0.001
-	filename = 'data-copy.csv' # 'data.csv'
+	filename = 'data-copy.csv'  # 'data.csv'
 
 	dataset = utils.load_csv(filename)
 
