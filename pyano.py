@@ -57,6 +57,7 @@ class ActivationNeuron(Neuron):
 		super().__init__()
 		self.delta = 0
 
+
 	def get_activation(self):
 		return self.layer.activation.activation(self.input, [neuron.weights for neuron in self.layer.neurons])
 
@@ -123,6 +124,7 @@ class NeuralLayer(abc.ABC):
 		self.next_layer = None
 		self.prev_layer = None
 
+
 	# Calculate neuron activation for an input
 	def activate(self, weights, inputs, bias):
 		activation = 0
@@ -131,7 +133,8 @@ class NeuralLayer(abc.ABC):
 				activation += weights[i] * inputs[i]
 		activation += bias
 		return activation
-		
+
+
 	def forward_propagate(self, inputs):
 		new_inputs = []
 		for n, neuron in enumerate(self.neurons):
@@ -169,19 +172,21 @@ class WeightedLayer(NeuralLayer):
 	def attachToNextLayer(self, n_inputs, layer: NeuralLayer):
 		self.next_layer = layer
 		layer.prev_layer = self
+		n_neurons_in_next_layer = len(self.next_layer.neurons)
 		for neuron in self.neurons:
-			neuron.weights = utils.generate_weights(n_inputs + 1)
-			neuron.next_weights = utils.generate_zeros(n_inputs + 1)
-			neuron.partial_error_derivatives = utils.generate_zeros(n_inputs + 1)
-			neuron.prev_weights = utils.generate_zeros(n_inputs + 1)
+			neuron.weights = utils.generate_weights(n_neurons_in_next_layer)
+			neuron.next_weights = utils.generate_zeros(n_neurons_in_next_layer)
+			neuron.partial_error_derivatives = utils.generate_zeros(n_neurons_in_next_layer)
+			neuron.prev_weights = utils.generate_zeros(n_neurons_in_next_layer)
 		bias = utils.generate_bias()
 		if type(layer) == OutputLayer:
 			output_layer = layer
+			n_neurons_in_output_layer = len(self.neurons)
 			for on, output_neuron in enumerate(output_layer.neurons):
-				output_neuron.weights = utils.generate_weights(len(self.neurons) + 1)
-				output_neuron.next_weights = utils.generate_zeros(len(self.neurons) + 1)
-				output_neuron.partial_error_derivatives = utils.generate_zeros(len(self.neurons) + 1)
-				output_neuron.prev_weights = utils.generate_zeros(len(self.neurons) + 1)
+				output_neuron.weights = utils.generate_weights(n_neurons_in_output_layer)
+				output_neuron.next_weights = utils.generate_zeros(n_neurons_in_output_layer)
+				output_neuron.partial_error_derivatives = utils.generate_zeros(n_neurons_in_output_layer)
+				output_neuron.prev_weights = utils.generate_zeros(n_neurons_in_output_layer)
 			output_neuron.bias = utils.generate_bias()
 		return layer
 
@@ -295,7 +300,6 @@ class OutputLayer(WeightedLayer, ActivationLayer):
 			temp = learning_rate * output_neuron.delta + mu * output_layer.prev_bias
 			output_layer.bias += temp
 			output_layer.prev_bias = temp
-		
 
 
 class HiddenLayer(WeightedLayer, ActivationLayer):
