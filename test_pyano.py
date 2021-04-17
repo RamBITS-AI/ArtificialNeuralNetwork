@@ -166,7 +166,8 @@ def train_and_predict(dataset, train, test, row, learning_rate, n_epoch, mu):
 
 	predictions = list()
 	for row in test:
-		prediction = predict(input_layer, output_layer, dataset, row)
+		inputs = row[:-1]
+		prediction = predict(input_layer, output_layer, dataset, inputs)
 		predictions.append(prediction)
 
 	print('end')
