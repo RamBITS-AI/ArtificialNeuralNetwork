@@ -5,7 +5,7 @@
     Ramachandran C - M.Tech Student of Snehanshu Saha Sir in BITS Pilani
 
 # Pyano - A Deep Neural Network Framework
-An artificial neural network that utilizes back propagation for training. It has a total of 5  layers of neurons. The hidden layers have 4 each, the input layer has 3 and the output layer has 6 neurons.
+An deep artificial neural network that utilizes back propagation for training. It has a total of 5  layers of neurons. The hidden layers have 4 each, the input layer has 3 and the output layer has 6 neurons (as per the number of distinct classes in the given dataset).
 
 # Deep Neural Network
 The Layers in the Neural Network consist of:  
