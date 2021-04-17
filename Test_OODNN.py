@@ -11,7 +11,7 @@ def test_OODNN():
 	learning_rate = 0.1 #1e-05
 	n_epoch = 1500
 	mu = 0.001
-	filename = 'data.csv' # 'data.csv'
+	filename = 'data-copy.csv' # 'data.csv'
 
 	dataset = utils.load_csv(filename)
 
