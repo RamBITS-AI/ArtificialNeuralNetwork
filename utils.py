@@ -116,9 +116,13 @@ def generate_bias():
 	return random()
 
 def softmax(activation, weights):
-    eZ = np.exp(weights)
-    sm = eZ / np.sum(eZ)
+    exp_inputs = [exp(weight) for weight in weights]
+    sm = (exp(activation) - max(exp_inputs)) / sum(exp_inputs)
     return sm
+    
+    # eZ = np.exp(weights)
+    # sm = eZ / np.sum(eZ)
+    # return sm
 
     # exps = np.exp(weights)
     # sums = np.sum(exps)

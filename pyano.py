@@ -59,7 +59,7 @@ class ActivationNeuron(Neuron):
 
 
 	def get_activation(self):
-		return self.layer.activation.activation(self.input, [neuron.weights for neuron in self.layer.neurons])
+		return self.layer.activation.activation(self.input, self.weights)  # [neuron.weights for neuron in self.layer.neurons])
 
 
 	def get_derivative(self):
