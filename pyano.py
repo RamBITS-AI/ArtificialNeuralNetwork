@@ -25,14 +25,14 @@ import enum
 import utils
 
 import numpy as np 
-
+ 
 class GradientDescents(enum.Enum):
     GradientDescent = 1,
     MiniBatchGradientDescent = 2,
     StochasticGradientDescent = 3
 
 
-class Neuron:
+class Neuron(abc.ABC):
 	def __init__(
 		self) -> None:
 		super().__init__()
@@ -169,7 +169,7 @@ class WeightedLayer(NeuralLayer):
 		self.partial_error_derivative_of_bias = 0
 
 
-	def attachToNextLayer(self, n_inputs, layer: NeuralLayer):
+	def attachToNextLayer(self, layer: NeuralLayer):
 		self.next_layer = layer
 		layer.prev_layer = self
 		n_neurons_in_next_layer = len(self.next_layer.neurons)
@@ -351,3 +351,5 @@ class HiddenLayer(WeightedLayer, ActivationLayer):
 			temp = learning_rate * hidden_neuron.delta + mu * hidden_layer.prev_bias
 			hidden_layer.bias += temp
 			hidden_layer.prev_bias = temp
+
+
