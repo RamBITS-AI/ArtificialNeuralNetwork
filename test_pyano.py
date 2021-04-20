@@ -79,6 +79,8 @@ def test_pyano():
 def initialize_network(n_inputs, n_targets) -> Network:
 	n_hidden = 4
 
+	network = None
+
 	network = Sequential(dnn.InputLayer(n_inputs, dnn.SigmoidActivation()))
 
 	network.add(dnn.HiddenLayer(n_hidden, dnn.SigmoidActivation()))
