@@ -8,7 +8,7 @@
 			"name": "Python: Current File",
 			"type": "python",
 			"request": "launch",
-			"program": "test_pyano.py",
+			"program": "play_pyano.py",
 			"console": "integratedTerminal"
 		}
 	]
