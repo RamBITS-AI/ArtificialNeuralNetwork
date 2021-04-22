@@ -8,7 +8,7 @@ import utils
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import cohen_kappa_score
 
-def test_pyano():
+def play_pyano():
 	n_folds = 5
 	learning_rate = 0.1  # 1e-05
 	n_epoch = 1500
@@ -91,25 +91,6 @@ def initialize_network(n_inputs, n_targets) -> Network:
 
 	return network
 
-# Make a prediction with a network
-def predict(network, row):
-	outputs = network.forward_propagate(row)
-
-	prev_final_output = 0
-	final_output = 0
-	final_outputs = []
-
-	for neuron in network.output_layer.neurons:
-		final_output = max(prev_final_output, neuron.output)
-		prev_final_output = final_output
-		final_outputs.append(neuron.output)
-
-	n = final_outputs.index(final_output)
-
-	print("Final Output:", n)
-
-	return n
-
 
 def train_and_predict(dataset, train, test, row, learning_rate, n_epoch, mu):
 	n_input_columns = len(train[0]) - 1 # Number of columns in the training dataset minus the one column which contains the output
@@ -147,4 +128,4 @@ def train_and_predict(dataset, train, test, row, learning_rate, n_epoch, mu):
 	print('end')
 	return predictions
 
-test_pyano()
+play_pyano()
