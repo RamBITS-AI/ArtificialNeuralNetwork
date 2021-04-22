@@ -1,3 +1,25 @@
+""" 
+    layers.py
+    
+	Created on 19-April-2021 @ 08:29 PM IST
+
+    Created by Ramachandran Chandrasekaran
+
+	Pyano - A Deep Neural Network Framework
+
+	An deep artificial neural network that utilizes back propagation for training. 
+	It has a total of 5 layers of neurons. The hidden layers have 4 each, 
+	the input layer has 3 and the output layer has 6 neurons 
+	(as per the number of distinct classes in the given dataset).
+
+	Contributions:
+
+	Snehanshu Saha Sir from BITS Pilani
+		For Teaching the mathematical concepts and also showing with examples on how to develop a Neural Network.
+		For guiding in many ways and sharing his wisdom in the art of machine learning.
+		And for sharing a working Artificial MultiLayerPerceptron implementation in Python.
+	Ramachandran C - M.Tech Student of Snehanshu Saha Sir in BITS Pilani and Primary Author of Pyano.
+"""
 import pyano as dnn
 
 import abc
