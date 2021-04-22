@@ -1,3 +1,25 @@
+""" 
+    play_piano.py
+    
+	Created on 22-April-2021 @ 10:10 PM IST
+
+    Created by Ramachandran Chandrasekaran
+
+	Pyano - A Deep Neural Network Framework
+
+	An deep artificial neural network that utilizes back propagation for training. 
+	It has a total of 5 layers of neurons. The hidden layers have 4 each, 
+	the input layer has 3 and the output layer has 6 neurons 
+	(as per the number of distinct classes in the given dataset).
+
+	Contributions:
+
+	Snehanshu Saha Sir from BITS Pilani
+		For Teaching the mathematical concepts and also showing with examples on how to develop a Neural Network.
+		For guiding in many ways and sharing his wisdom in the art of machine learning.
+		And for sharing a working Artificial MultiLayerPerceptron implementation in Python.
+	Ramachandran C - M.Tech Student of Snehanshu Saha Sir in BITS Pilani and Primary Author of Pyano.
+"""
 import pyano as dnn
 from core.layers import Network, Sequential
 
@@ -8,7 +30,7 @@ import utils
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import cohen_kappa_score
 
-def test_pyano():
+def play_pyano():
 	n_folds = 5
 	learning_rate = 0.1  # 1e-05
 	n_epoch = 1500
@@ -91,25 +113,6 @@ def initialize_network(n_inputs, n_targets) -> Network:
 
 	return network
 
-# Make a prediction with a network
-def predict(network, row):
-	outputs = network.forward_propagate(row)
-
-	prev_final_output = 0
-	final_output = 0
-	final_outputs = []
-
-	for neuron in network.output_layer.neurons:
-		final_output = max(prev_final_output, neuron.output)
-		prev_final_output = final_output
-		final_outputs.append(neuron.output)
-
-	n = final_outputs.index(final_output)
-
-	print("Final Output:", n)
-
-	return n
-
 
 def train_and_predict(dataset, train, test, row, learning_rate, n_epoch, mu):
 	n_input_columns = len(train[0]) - 1 # Number of columns in the training dataset minus the one column which contains the output
@@ -147,4 +150,4 @@ def train_and_predict(dataset, train, test, row, learning_rate, n_epoch, mu):
 	print('end')
 	return predictions
 
-test_pyano()
+play_pyano()
