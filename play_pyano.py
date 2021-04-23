@@ -30,6 +30,7 @@ import utils
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import cohen_kappa_score
 
+
 def play_pyano():
 	n_folds = 5
 	learning_rate = 0.1  # 1e-05
@@ -97,6 +98,7 @@ def play_pyano():
 		k=cohen_kappa_score(actual, predicted)
 		print('Çohen Kappa \n{}'.format(k))
 		scores.append(accuracy)
+
 
 def initialize_network(n_inputs, n_targets) -> Network:
 	n_hidden = 4
